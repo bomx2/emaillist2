@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sds.icto.emaillist.action.ActionFactory;
 import com.sds.icto.emaillist.action.FormAction;
 import com.sds.icto.emaillist.action.IndexAction;
 import com.sds.icto.emaillist.action.InsertAction;
@@ -30,19 +31,14 @@ public class EmailListServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		try{	
 			request.setCharacterEncoding( "utf-8" );
+			
 			String a = request.getParameter( "a" );
-			
-			Action action = null;
-			
-			if( "form".equals( a ) ) {
-				action = new FormAction();
-			} else if( "insert".equals( a ) ) {
-				action = new InsertAction();
-			} else {
-				action = new IndexAction();
-			}
-			action.execute( request, response );
 
+			ActionFactory af = ActionFactory.getInstance();	
+			Action action = af.getAction( a );
+			
+			action.execute(request, response);	
+			
 		} catch ( Exception ex ) {
 			ex.printStackTrace();
 		}
